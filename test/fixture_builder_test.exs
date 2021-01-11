@@ -109,6 +109,14 @@ defmodule FixtureBuilderTest do
     test "puts the result correctly" do
       assert %{hello: :world} = Fixtures.fixtures([run(:hello, fn _, _ -> :world end)])
     end
+
+    test "handle multiple runs correctly" do
+      assert %{hello: :bob} =
+               Fixtures.fixtures([
+                 run(:hello, fn _, _ -> :world end),
+                 run(:hello, fn _, _ -> :bob end)
+               ])
+    end
   end
 
   describe "append()" do

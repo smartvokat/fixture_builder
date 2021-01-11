@@ -75,12 +75,14 @@ defmodule FixtureBuilder.Executer do
     |> execute_next(module)
   end
 
-  defp execute_next(%FixtureBuilder{ops: [%Op{name: :run} = op | tail]} = fixtures, _module) do
+  defp execute_next(%FixtureBuilder{ops: [%Op{name: :run} = op | tail]} = fixtures, module) do
     fixtures = Map.put(fixtures, :parent, Utils.get(fixtures.data, Enum.slice(op.path, 0..-2)))
     result = apply(op.extra.callback, [fixtures, fixtures.args])
     data = Utils.update(fixtures.data, op.path, fn _ -> result end)
     nested_ops = Enum.map(op.children, &Map.put(&1, :path, op.path ++ &1.path))
+
     %{fixtures | data: data, ops: nested_ops ++ tail}
+    |> execute_next(module)
   end
 
   defp apply_fixture(op, fixtures, module) do
