@@ -88,7 +88,14 @@ defmodule FixtureBuilder.Executer do
   defp apply_fixture(op, fixtures, module) do
     fixture_module = Utils.find_fixture_module!(op.fixture, module)
 
-    case apply(fixture_module, :build, [op.fixture, op.args, fixtures]) do
+    args =
+      if is_function(op.args, 1) do
+        op.args.(fixtures.data)
+      else
+        op.args
+      end
+
+    case apply(fixture_module, :build, [op.fixture, args, fixtures]) do
       %FixtureBuilder{} = nested_fixtures ->
         nested_data = Utils.update(fixtures.data, op.path, fn _ -> nested_fixtures.data end)
         nested_ops = Enum.map(nested_fixtures.ops, &Map.put(&1, :path, op.path ++ &1.path))

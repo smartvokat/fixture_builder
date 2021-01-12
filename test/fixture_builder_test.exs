@@ -49,6 +49,14 @@ defmodule FixtureBuilderTest do
                ])
     end
 
+    test "supports functions as args" do
+      assert %{a: %{hello: "world"}, b: "world"} =
+               Fixtures.fixtures([
+                 put(:a, :custom_value, %{value: %{hello: "world"}}),
+                 put(:b, :custom_value, &%{value: &1.a.hello})
+               ])
+    end
+
     test "supports composition" do
       assert %{comp: %{a: :map_comp, b: :map_comp}} = Fixtures.fixtures(put(:comp, :map_comp))
 
@@ -90,6 +98,14 @@ defmodule FixtureBuilderTest do
                  put(:a_key, :custom_value, %{value: %{hello: "world"}}, [
                    merge(:assert_parent_is_map)
                  ])
+               ])
+    end
+
+    test "supports functions as args" do
+      assert %{a: "hello", b: "world", c: "hello bob"} =
+               Fixtures.fixtures([
+                 merge(:simple_map),
+                 merge(:custom_value, &%{value: %{c: "#{&1.a} bob"}})
                ])
     end
   end

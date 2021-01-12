@@ -63,7 +63,7 @@ defmodule FixtureBuilder do
 
       def put(path, fixture, args \\ %{})
 
-      def put(path, fixture, args) when is_map(args),
+      def put(path, fixture, args) when is_map(args) or is_function(args, 1),
         do: FixtureBuilder.Ops.put(path, fixture, args, [])
 
       def put(path, fixture, children) when is_list(children),
@@ -77,8 +77,9 @@ defmodule FixtureBuilder do
       def append(path, fixture) when is_list(path),
         do: FixtureBuilder.Ops.append(path, fixture, %{}, [])
 
-      def append(path, fixture, args) when is_list(path) and is_map(args),
-        do: FixtureBuilder.Ops.append(path, fixture, args, [])
+      def append(path, fixture, args)
+          when is_list(path) and (is_map(args) or is_function(args, 1)),
+          do: FixtureBuilder.Ops.append(path, fixture, args, [])
 
       def append(path, fixture, children)
           when is_list(path) and is_list(children),
@@ -87,7 +88,7 @@ defmodule FixtureBuilder do
       def append(path, fixture, args, children),
         do: FixtureBuilder.Ops.append(path, fixture, args, children)
 
-      def append(fixture, args) when is_map(args),
+      def append(fixture, args) when is_map(args) or is_function(args, 1),
         do: FixtureBuilder.Ops.append([], fixture, args, [])
 
       def append(fixture, children) when is_list(children),
