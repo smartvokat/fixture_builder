@@ -149,6 +149,12 @@ defmodule FixtureBuilderTest do
                |> Fixtures.fixtures()
     end
 
+    test "replaces an existing non-list value with a list" do
+      assert %{list: [:simple_atom]} ==
+               Fixtures.new(%{list: %{}}, %{}, [append([:list], :simple_atom)])
+               |> Fixtures.fixtures()
+    end
+
     test "sets the parent correctly" do
       assert %{users: %{names: ["john", "jane", "bob"]}} ==
                Fixtures.fixtures([

@@ -36,11 +36,8 @@ defmodule FixtureBuilder.Executer do
             value when is_list(value) ->
               value ++ [result]
 
-            value ->
-              raise RuntimeError,
-                    "Expected a list to append to, got: #{inspect(value)}. " <>
-                      "Make sure the parent is a list and/or you provided the correct " <>
-                      "initial data when using fixture composition."
+            _ ->
+              [result]
           end)
 
         nested_ops = Enum.map(op.children, &Map.put(&1, :path, op.path ++ &1.path))
