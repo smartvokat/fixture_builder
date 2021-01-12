@@ -1,6 +1,8 @@
 defmodule FixtureBuilder.Utils do
   @moduledoc false
 
+  alias FixtureBuilder.Op
+
   @spec find_fixture_module!(atom(), any()) :: any()
   def find_fixture_module!(fixture_name, fixture_module) do
     result =
@@ -56,4 +58,7 @@ defmodule FixtureBuilder.Utils do
       item when is_binary(item) or is_atom(item) -> Access.key(item)
     end)
   end
+
+  def get_parent_path(%Op{path: path, target_path: target_path}),
+    do: Enum.slice(path, 0..(length(target_path) * -1 - 1))
 end

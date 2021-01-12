@@ -9,7 +9,8 @@ defmodule FixtureBuilder.Ops do
       children: children,
       fixture: fixture,
       name: :put,
-      path: List.wrap(path)
+      path: List.wrap(path),
+      target_path: List.wrap(path)
     }
 
   @spec append(FixtureBuilder.Op.path(), atom(), map(), list(FixtureBuilder.Op.t())) ::
@@ -20,7 +21,8 @@ defmodule FixtureBuilder.Ops do
       children: children,
       fixture: fixture,
       name: :append,
-      path: List.wrap(path)
+      path: List.wrap(path),
+      target_path: List.wrap(path)
     }
 
   @spec merge(atom(), map()) :: FixtureBuilder.Op.t()
@@ -31,12 +33,13 @@ defmodule FixtureBuilder.Ops do
       name: :merge
     }
 
-  @spec run(FixtureBuilder.Op.path(), any(), FixtureBuilder.Op.ops()) :: FixtureBuilder.Op.t()
+  # @spec run(FixtureBuilder.Op.path(), any(), FixtureBuilder.Op.ops()) :: FixtureBuilder.Op.t()
   def run(path, callback, children),
     do: %FixtureBuilder.Op{
       children: children,
       extra: %{callback: callback},
       name: :run,
-      path: List.wrap(path)
+      path: List.wrap(path),
+      target_path: List.wrap(path)
     }
 end

@@ -32,10 +32,15 @@ defmodule FixtureBuilderTest do
     end
 
     test "sets the parent correctly" do
-      assert %{a_key: %{hello: "world", key: %{asserted_map: true}}} ==
+      assert %{a_key: %{hello: "world", key: true, data: [%{hello: "bob"}]}} ==
                Fixtures.fixtures([
-                 put(:a_key, :custom_value, %{value: %{hello: "world"}}, [
-                   put(:key, :assert_parent_is_map)
+                 put(:a_key, :custom_value, %{value: %{hello: "world", data: [%{}]}}, [
+                   put([:data, 0, :hello], :custom_value, %{value: "bob"}),
+                   put(:key, :assert, %{
+                     callback: fn _, _, f ->
+                       assert f.parent == %{data: [%{hello: "bob"}], hello: "world"}
+                     end
+                   })
                  ])
                ])
     end
@@ -142,6 +147,21 @@ defmodule FixtureBuilderTest do
       assert %{list: [:simple_atom]} ==
                Fixtures.new(%{list: []}, %{}, [append([:list], :simple_atom)])
                |> Fixtures.fixtures()
+    end
+
+    test "sets the parent correctly" do
+      assert %{users: %{names: ["john", "jane", "bob"]}} ==
+               Fixtures.fixtures([
+                 put(:users, :custom_value, %{value: %{names: ["john"]}}, [
+                   append([:names], :custom_value, %{value: "jane"}),
+                   append([:names], :assert, %{
+                     callback: fn _, _, f ->
+                       assert f.parent == %{names: ["john", "jane"]}
+                       "bob"
+                     end
+                   })
+                 ])
+               ])
     end
   end
 end

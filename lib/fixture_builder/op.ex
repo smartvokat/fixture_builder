@@ -9,8 +9,15 @@ defmodule FixtureBuilder.Op do
           fixture: atom(),
           name: atom(),
           path: FixtureBuilder.Op.path(),
+          target_path: FixtureBuilder.Op.path(),
           extra: map()
         }
 
-  defstruct name: nil, args: nil, children: [], path: [], fixture: nil, extra: %{}
+  defstruct name: nil,
+            args: nil,
+            children: [],
+            path: [],
+            fixture: nil,
+            extra: %{},
+            target_path: []
 end

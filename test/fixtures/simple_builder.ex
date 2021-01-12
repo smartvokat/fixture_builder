@@ -8,4 +8,8 @@ defmodule FixtureBuilder.Test.Fixtures.SimpleBuilder do
 
   def build(:atom, _, _), do: :some_atom
   def build(:simple_map, _, _), do: %{a: "hello", b: "world"}
+
+  def build(:assert, %{callback: callback} = args, fixtures) do
+    callback.(:assert, args, fixtures)
+  end
 end
