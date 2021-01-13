@@ -18,6 +18,14 @@ defmodule FixtureBuilderTest do
     end
   end
 
+  describe "merge_args()" do
+    test "merges correctly" do
+      assert %{a: "a", b: "b"} == Fixtures.merge_args(%{a: "a"}, %{b: "b"})
+      assert %{a: "a", b: "b"} == Fixtures.merge_args(%{b: "b"}, %{a: "a"})
+      assert %{a: "a", b: "c"} == Fixtures.merge_args(%{b: "b"}, %{a: "a", b: "c"})
+    end
+  end
+
   describe "put()" do
     test "puts the result into a simple path" do
       assert %{key: :some_atom} == Fixtures.fixtures(put(:key, :atom))

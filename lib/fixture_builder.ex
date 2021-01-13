@@ -113,7 +113,7 @@ defmodule FixtureBuilder do
       Merges keys from `source` into `target`.
       """
       @spec merge_args(map(), map()) :: map()
-      def merge_args(target, source), do: Map.merge(source, target)
+      def merge_args(target, source), do: Map.merge(target, source)
 
       @doc """
       Merges keys from `source` into `target` according to the defined `mapping`.
