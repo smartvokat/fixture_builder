@@ -30,4 +30,8 @@ defmodule FixtureBuilder.Test.Fixtures.ComplexBuilder do
     assert parent == %{hello: "world"}
     %{asserted_map: true}
   end
+
+  def build(:data, %{key: key}, %FixtureBuilder{data: data}) do
+    Map.get(data, key)
+  end
 end

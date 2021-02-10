@@ -27,13 +27,15 @@ defmodule FixtureBuilder do
       require FixtureBuilder
       import FixtureBuilder, only: [import_fixtures: 1]
 
-      def fixtures(ops) when is_list(ops),
-        do: FixtureBuilder.fixtures(%FixtureBuilder{ops: ops}, __MODULE__)
+      def fixtures(input, data \\ %{})
 
-      def fixtures(%FixtureBuilder.Op{} = op),
-        do: FixtureBuilder.fixtures(%FixtureBuilder{ops: [op]}, __MODULE__)
+      def fixtures(ops, data) when is_list(ops),
+        do: FixtureBuilder.fixtures(%FixtureBuilder{ops: ops, data: data}, __MODULE__)
 
-      def fixtures(%FixtureBuilder{} = fixtures),
+      def fixtures(%FixtureBuilder.Op{} = op, data),
+        do: FixtureBuilder.fixtures(%FixtureBuilder{ops: [op], data: data}, __MODULE__)
+
+      def fixtures(%FixtureBuilder{} = fixtures, _),
         do: FixtureBuilder.fixtures(fixtures, __MODULE__)
 
       def fixture(fixture, args \\ %{})

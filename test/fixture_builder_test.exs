@@ -26,6 +26,13 @@ defmodule FixtureBuilderTest do
     end
   end
 
+  describe "fixtures()" do
+    test "pass initial data" do
+      assert %{hello: "world"} ==
+               Fixtures.fixtures(put(:hello, :data, %{key: :hello}), %{hello: "world"})
+    end
+  end
+
   describe "put()" do
     test "puts the result into a simple path" do
       assert %{key: :some_atom} == Fixtures.fixtures(put(:key, :atom))
