@@ -119,6 +119,7 @@ defmodule FixtureBuilder do
 
       @doc """
       Merges keys from `source` into `target` according to the defined `mapping`.
+      This function ignores the given keys in the `mapping` if these keys exists in `source`.
       """
       @spec merge_args(map(), FixtureBuilder.t() | map(), %{atom() => atom() | list()}) :: map()
       def merge_args(target, %FixtureBuilder{data: source}, mapping),
@@ -131,6 +132,20 @@ defmodule FixtureBuilder do
           else
             acc
           end
+        end)
+      end
+
+      @doc """
+      Merges keys from `source` into `target` according to the defined `mapping`.
+      It overrides any existing keys in `source`.
+      """
+      @spec merge_args!(map(), FixtureBuilder.t() | map(), %{atom() => atom() | list()}) :: map()
+      def merge_args!(target, %FixtureBuilder{data: source}, mapping),
+        do: merge_args!(target, source, mapping)
+
+      def merge_args!(target, source, mapping) do
+        Enum.reduce(mapping, target, fn {attr, path}, acc ->
+          Map.put(acc, attr, FixtureBuilder.Utils.get(source, path))
         end)
       end
     end

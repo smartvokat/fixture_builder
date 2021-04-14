@@ -26,6 +26,18 @@ defmodule FixtureBuilderTest do
     end
   end
 
+  describe "merge_args!()" do
+    test "merges correctly" do
+      fixtures =
+        Fixtures.fixtures([
+          put(:a, :custom_value, %{value: "hello modern world"})
+        ])
+
+      assert %{a: "hello modern world"} ==
+               Fixtures.merge_args!(%{a: "hello world"}, fixtures, %{a: [:a]})
+    end
+  end
+
   describe "fixtures()" do
     test "pass initial data" do
       assert %{hello: "world"} ==
